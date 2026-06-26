@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #3b82f6;
+  --color-brand-dark: #1d4ed8;
+}
+
+@utility glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
+}
+
+@utility glass-dark {
+  @apply bg-slate-800/70 backdrop-blur-md border border-slate-700/50 shadow-lg;
+}
+
+/* Make the date picker calendar icon white on dark backgrounds */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.7;
+  cursor: pointer;
+}
