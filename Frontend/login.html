@@ -25,16 +25,16 @@
       <!-- Error Message -->
       <div x-show="errorMsg" class="bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg px-4 py-3 mb-6 text-sm" x-text="errorMsg"></div>
 
-      <form @submit.prevent="login" class="space-y-5">
+      <form @submit.prevent="login" class="space-y-5" autocomplete="off">
         <div>
           <label class="block text-sm font-medium text-slate-400 mb-1">Email Address</label>
-          <input type="email" x-model="form.email" required placeholder="you@example.com"
+          <input type="email" x-model="form.email" required placeholder="you@example.com" autocomplete="off"
             class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand transition">
         </div>
 
         <div>
           <label class="block text-sm font-medium text-slate-400 mb-1">Password</label>
-          <input type="password" x-model="form.password" required placeholder="••••••••"
+          <input type="password" x-model="form.password" required placeholder="••••••••" autocomplete="new-password"
             class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand transition">
         </div>
 
