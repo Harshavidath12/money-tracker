@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Finance Tracker - Transactions</title>
+  <script type="module" src="/src/transactions.ts"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen font-sans flex flex-col">
+  <div x-data="ledger()" x-init="init()" class="max-w-6xl mx-auto p-6 flex-1 w-full">
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center mb-10 py-4 border-b border-slate-800">
+      <h1 class="text-2xl font-bold text-brand flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        FinanceTracker
+      </h1>
+      <div class="flex items-center gap-6">
+        <a href="/" class="text-slate-400 hover:text-white transition">Dashboard</a>
+        <a href="/transactions.html" class="text-brand font-semibold">Transactions</a>
+        <a href="/categories.html" class="text-slate-400 hover:text-white transition">Categories</a>
+        <div class="flex items-center gap-3 ml-4 pl-4 border-l border-slate-700">
+          <span class="text-slate-300 text-sm" x-text="user.name"></span>
+          <button @click="logout()" class="text-slate-400 hover:text-red-400 transition text-sm flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg>
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Ledger Controls -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+      <div class="flex gap-4 w-full md:w-auto">
+        <input type="text" x-model="searchQuery" @input.debounce="fetchTransactions" placeholder="Search descriptions..." class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-brand w-full md:w-64">
+        
+        <select x-model="filterType" @change="fetchTransactions" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-brand">
+          <option value="">All Types</option>
+          <option value="income">Income Only</option>
+          <option value="expense">Expense Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="glass-dark rounded-2xl overflow-hidden">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-800/50 border-b border-slate-700 text-slate-400 text-sm uppercase tracking-wider">
+            <th class="p-4 font-medium">Date</th>
+            <th class="p-4 font-medium">Category</th>
+            <th class="p-4 font-medium">Description</th>
+            <th class="p-4 font-medium text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="tx in transactions" :key="tx.id">
+            <tr class="border-b border-slate-800 hover:bg-slate-800/30 transition">
+              <td class="p-4" x-text="tx.transaction_date"></td>
+              <td class="p-4">
+                <span class="px-3 py-1 rounded-full text-xs font-medium" 
+                      :class="tx.type === 'income' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'"
+                      x-text="tx.category?.name || 'Uncategorized'">
+                </span>
+              </td>
+              <td class="p-4 text-slate-300" x-text="tx.description || '-'"></td>
+              <td class="p-4 text-right font-semibold" 
+                  :class="tx.type === 'income' ? 'text-green-400' : 'text-red-400'"
+                  x-text="(tx.type === 'income' ? '+ ' : '- ') + formatCurrency(tx.amount)">
+              </td>
+            </tr>
+          </template>
+          <tr x-show="transactions.length === 0">
+            <td colspan="4" class="p-8 text-center text-slate-500">No transactions found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-auto py-5 text-center w-full">
+    <p class="text-slate-400 text-sm">
+      &copy; 2026 All Rights Reserved &mdash; Designed By : <span class="text-brand font-semibold">Vidath Harshitha</span>
+    </p>
+  </footer>
+
+</body>
+</html>
